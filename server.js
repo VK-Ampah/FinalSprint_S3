@@ -18,9 +18,13 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
-const loginsRouter = require('./routes/logins');
-app.use('/logins', loginsRouter);
 
+
+const loginsRouter = require('./routes/signin');
+app.use('/signin', loginsRouter);
+
+const signupRouter = require('./routes/signup');
+app.use('/signup', signupRouter);
 
 app.use((req, res) => {
     res.status(404).send('Page not found');
