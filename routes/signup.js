@@ -7,7 +7,7 @@ const { addAuthUser } = require('../services/pg.authdb');
 router.get('/', async (req, res) => {
     try {
         if (DEBUG) console.log('GET /signup');
-        res.render('signup');
+        res.render('signup',{ loggedIn: req.session.loggedIn });
     } catch (error) {
         console.error('Error getting users:', error);
         res.status(500).send('Error getting users');
@@ -22,8 +22,8 @@ router.post('/', async (req, res) => {
         const newUser = await addAuthUser(req.body.firstname, req.body.lastname, req.body.email, req.body.username, hashedPassword );
         console.log(req.body);
         console.log(newUser);
-        // res.redirect('/');
-        res.send('User created');
+        res.redirect('/signin');
+        // res.send('User created');
     } catch (err) {
         console.error(err);
         res.status(500).send('An error occurred while creating the user');

@@ -1,11 +1,15 @@
 const router = require('express').Router();
+// const flash = require('express-flash');
 
 const { getAuthUsers, loginAuthUser, } = require('../services/pg.authdb');
 
+
+// render signin page
 router.get('/', async (req, res) => {
     try {
         if (DEBUG) console.log('GET /logins');
-        res.render('signin');
+        const loggedIn = req.session.loggedIn || false;
+        res.render('signin', { loggedIn });
     } catch (error) {
         console.error('Error getting users:', error);
         res.status(500).send('Error getting users');
@@ -13,17 +17,10 @@ router.get('/', async (req, res) => {
 }
 );
 
-// const express = require('express');
-// const bcrypt = require('bcrypt');
-// // Ensure you have the db.js file set up
-// const app = express();
-// app.use(express.json());
-
-
-// const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
+// post signin page and compare input password to hashed password
 router.post('/', async (req, res) => {
+    console.log('Session ID:', req.sessionID); // Log the session ID
+    console.log('Session:', req.session); // Log the session object
     try {
         if (DEBUG) console.log('POST /logins');
         const { username, password } = req.body;
@@ -31,14 +28,30 @@ router.post('/', async (req, res) => {
         if (user.error) {
             res.status(400).send('Invalid Credentials');
         } else {
-            res.json(user);
+            // Set a session variable to indicate that the user is logged in
+            req.session.loggedIn = true;
+            res.redirect('/search');
         }
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
         res.status(500).send('An error occurred while logging in');
     }
-}
-);
+});
+// Sign out route
+router.get('/signout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.redirect('/signin');
+        }
+
+        res.clearCookie('sid');
+        res.redirect('/');
+    });
+});
+
 
 module.exports = router;
+
+
+
+
