@@ -3,10 +3,33 @@
 <%- include ('./partials/navbar.ejs') %>
 <body class="bg-slate-900">
     <div class="bg-slate-900 h-screen text-slate-400 flex flex-col items-center justify-center">
-        <p class="text-slate-200 text-2xl mb-4">Search</p>
+        <p class="text-slate-200 text-2xl mb-4">Search for players</p>
         <form action="/search" method="POST" enctype="application/x-www-form-urlencoded" class="flex flex-col">
-            <label for="search">Search:</label>
-            <input type="text" id="search" name="search" required>
+            <label for="attribute">Description:</label>
+            <input type="text" id="attribute" name="attribute" required>
+
+            <label for="position">Position:</label>
+            <input type="text" id="position" name="position" required>
             <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
         </form>
-    </div>
+        <div class="mt-4">
+            <p class="text-slate
+            -200 text-2xl mb-4">Results</p>
+            <div class="flex flex-col">
+                <% if (results.length > 0) { %>
+                    <% results.forEach((result) => { %>
+                        <div class="flex flex-col bg-slate-800 p-4 rounded-lg mb-4">
+                            <p class="text-slate-200 text-xl">Name: <%= result.first_name +' '+ result.last_name %></p>
+                            <p class="text-slate-500 text-sm">Position: <%= result.position %></p>
+                            <p class="text-slate-200 text-sm">Team: <%= result.team_name %></p>
+                            <p class="text-slate-200 text-sm">Goals: <%= result.goals_scored %></p>
+                            <p class="text-slate-200 text-sm">Assists: <%= result.assists %></p>
+                            <p class="text-slate-200 text-sm">Description <%= result.description %></p>                            
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <p class="text-slate
+                    -200 text-xl">No results found</p>
+                <% } %>
+            </div>
+        </div>
