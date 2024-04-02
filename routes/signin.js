@@ -25,6 +25,7 @@ router.post('/', async (req, res) => {
         if (DEBUG) console.log('POST /logins');
         const { username, password } = req.body;
         const user = await loginAuthUser(username, password);
+        req.session.username = username;       
         if (user.error) {
             res.status(400).send('Invalid Credentials');
         } else {
