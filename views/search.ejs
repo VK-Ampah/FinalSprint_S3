@@ -1,22 +1,40 @@
 <html lang="en">
 <%- include ('./partials/head.ejs') %>
 <%- include ('./partials/navbar.ejs') %>
-<body class="bg-slate-900">
-    <div class="bg-slate-900 h-screen text-slate-400 flex flex-col items-center justify-center">
+<body class="bg-slate-900 h-screen">
+    <div class="bg-slate-900 h-full text-slate-400 flex flex-col items-center justify-center">
         <p class="text-slate-200 text-2xl mb-4">Search for players</p>
-        <form action="/search" method="POST" enctype="application/x-www-form-urlencoded" class="flex flex-col">
-            <label for="attribute">Description:</label>
+        <form action="/search" method="POST" enctype="application/x-www-form-urlencoded" class="flex flex-row justify-between gap-2">
+            <label for="attribute">Player Description:</label>
             <input type="text" id="attribute" name="attribute" required>
 
-            <label for="position">Position:</label>
+            <label for="position">Player Position:</label>
             <input type="text" id="position" name="position" required>
+
+            <!-- <label for="database">Choose DB:</label>
+            <select name="database" id="database">
+                <option value="postgres">PostgreSQL</option>
+                <option value="mongodb">MongoDB</option>
+                <option value="all">ALL</option>
+            </select> -->
+
+            <label for="database" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select a DB option</label>
+            <select name="database" id="database" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+              <option selected>Choose a database</option>
+              <option value="postgres">PostgreSQL</option>
+              <option value="mongodb">MongoDB</option>
+              <option value="all">ALL</option>
+            </select>
+
+
+
             <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
         </form>
         <div class="mt-4">
-            <p class="text-slate
-            -200 text-2xl mb-4">Results</p>
+
             <div class="flex flex-col">
-                <% if (results.length > 0) { %>
+                <% if (results && results.length > 0) { %>
+                    <p class="text-slate-200 text-2xl mb-4">Results</p>
                     <% results.forEach((result) => { %>
                         <div class="flex flex-col bg-slate-800 p-4 rounded-lg mb-4">
                             <p class="text-slate-200 text-xl">Name: <%= result.first_name +' '+ result.last_name %></p>
@@ -24,7 +42,7 @@
                             <p class="text-slate-200 text-sm">Team: <%= result.team_name %></p>
                             <p class="text-slate-200 text-sm">Goals: <%= result.goals_scored %></p>
                             <p class="text-slate-200 text-sm">Assists: <%= result.assists %></p>
-                            <p class="text-slate-200 text-sm">Description <%= result.description %></p>                            
+                            <p class="text-slate-200 text-sm">Description: <%= result.description %></p>                            
                         </div>
                     <% }) %>
                 <% } else { %>
@@ -32,4 +50,12 @@
                     -200 text-xl">No results found</p>
                 <% } %>
             </div>
+            <% if (page > 1) { %>
+                <a href="/search?db=<%= db %>&page=<%= page - 1 %>&limit=<%= limit %>">Previous</a>
+            <% } %>
+            <% if (results.length === limit && page * limit < totalCount) { %>
+                <a href="/search?db=<%= db %>&page=<%= page + 1 %>&limit=<%= limit %>">Next</a>
+            <% } %>
         </div>
+    </div>
+</body>
