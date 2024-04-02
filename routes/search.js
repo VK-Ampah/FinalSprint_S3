@@ -20,6 +20,8 @@ router.get('/', async (req, res) => {
     let results = [];
     let totalPages = 0;
     let totalCount = 0;
+    let searchSubmitted = false;
+    console.log(' Initial search submitted: ',searchSubmitted)
 
     try {
         if (db === 'mongodb' && req.query.page) {
@@ -27,17 +29,26 @@ router.get('/', async (req, res) => {
             const mongoResults = await getAllPlayers(attribute, position);
             totalCount = mongoResults.length;
             results = await getPlayersByDescription(req.session.attribute, req.session.position, limit, offset);
+                searchSubmitted = req.session.searchSubmitted;
+   
+            console.log('mongo search submitted: ',searchSubmitted)
             console.log(results[0])
         } else if (db === 'postgres' && req.query.page) {
             console.log('GET from postgres')
             const pgResults = await getPlayers(attribute, position);
             totalCount = pgResults.length;
             results = await getPlayersDescription(req.session.attribute, req.session.position, limit, offset);
+                searchSubmitted = req.session.searchSubmitted;
+     
+            console.log('pg search submitted: ',searchSubmitted)
             console.log(results[0])
         } else if (db === 'all' && req.query.page) {
             const mongoResults = await getAllPlayers(attribute, position);
             const pgResults = await getPlayers(attribute, position);
-            const combinedResults = mongoResults.concat(pgResults);
+            const combinedResults = mongoResults.concat(pgResults);        
+            searchSubmitted = req.session.searchSubmitted;            
+            console.log(' Both search submitted: ',searchSubmitted)
+           
             totalCount = combinedResults.length;
             console.log('GET from both')
             console.log(combinedResults[0])
@@ -50,7 +61,7 @@ router.get('/', async (req, res) => {
         }
     } catch (error) {
         console.error('Error fetching data:', error);
-        // Handle errors appropriately
+        return res.status(500).json({ error: 'Error fetching data' });
     }
 
     // Render the search results page with pagination
@@ -61,7 +72,8 @@ router.get('/', async (req, res) => {
         limit,
         db,
         totalCount,
-        totalPages // This needs to be calculated or adjusted based on actual total for each scenario
+        searchSubmitted,
+        totalPages 
     });
 });
 
@@ -73,15 +85,17 @@ router.post('/', async (req, res) => {
         return res.redirect('/signup');
     }
 
-    // Extract search criteria and database selection
+    // Extract search criteria and database selection from the form submission and store in session storage
     const { attribute, position, database } = req.body;
     req.session.attribute = attribute;
     req.session.position = position;
     req.session.database = database;
+    const searchSubmitted = true;
+    req.session.searchSubmitted = searchSubmitted;
+    console.log('POST search submitted: ',searchSubmitted)
 
-    // Redirect to GET route to display initial results
+    // Redirect to GET route to display initial results// page 1
     res.redirect(`/search?db=${database}&page=1`);
 });
-
 
 module.exports = router;
