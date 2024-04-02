@@ -1,12 +1,89 @@
 <html lang="en">
 <%- include ('./partials/head.ejs') %>
-<%- include ('./partials/navbar.ejs') %>
-<body class="bg-slate-900">
-    <div class="bg-slate-900 h-screen text-slate-400 flex flex-col items-center justify-center">
-        <p class="text-slate-200 text-2xl mb-4">Search</p>
-        <form action="/search" method="POST" enctype="application/x-www-form-urlencoded" class="flex flex-col">
-            <label for="search">Search:</label>
-            <input type="text" id="search" name="search" required>
-            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
-        </form>
+<body class="bg-slate-900 h-screen flex flex-col">
+    <div class="h-full">
+        <header>
+        <%- include ('./partials/navbar.ejs') %>
+        </header>
+        <main>
+            <div class="bg-slate-900 text-slate-400 flex flex-col items-center justify-center">
+                <p class="text-slate-200 text-2xl mb-4">Search for players</p>
+                <div>
+                    <form action="/search" method="POST" enctype="application/x-www-form-urlencoded">
+                        <div class="flex flex-col md:flex-row items-center justify-center gap-2">
+                            <div class="flex flex-col m-2">
+                                <label class="text-slate-200" for="attribute">Player Description:</label>
+                                <input type="text" id="attribute" name="attribute"  class="rounded h-10" required>
+                            </div>
+
+                        <!-- <label for="position">Player Position:</label>
+                        <input type="text" id="position" name="position" required> -->
+
+                            <div class="m-2">
+                                <label for="position" class="block mb-2 text-sm font-medium text-slate-200">Select Position</label>
+                                <select name="position" id="position" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                                <option value="">Choose a position</option>
+                                <option value="Defender">Defender</option>
+                                <option value="Goalkeeper">Goalkeeper</option>
+                                <option value="Midfielder">Midfielder</option>
+                                <option value="Forward">Forward</option>
+                                </select>
+                            </div>
+
+                        <!-- <label for="database">Choose DB:</label>
+                        <select name="database" id="database">
+                            <option value="postgres">PostgreSQL</option>
+                            <option value="mongodb">MongoDB</option>
+                            <option value="all">ALL</option>
+                        </select> -->
+
+                            <div class="m-2">
+                                <label for="database" class="block mb-2 text-sm font-medium text-slate-200">Select a DB option</label>
+                                <select name="database" id="database" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                                <option selected>Choose a database</option>
+                                <option value="postgres">PostgreSQL</option>
+                                <option value="mongodb">MongoDB</option>
+                                <option value="all">ALL</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="mt-4">
+                    <div class="flex flex-col">
+                        <% if (results && results.length > 0) { %>
+                            <p class="text-slate-200 text-2xl mb-4">Results</p>
+                            <% results.forEach((result) => { %>
+                                <div class="flex flex-col bg-slate-800 p-4 rounded-lg mb-4">
+                                    <p class="text-slate-200 text-xl">Name: <%= result.first_name +' '+ result.last_name %></p>
+                                    <p class="text-slate-500 text-sm">Position: <%= result.position %></p>
+                                    <p class="text-slate-200 text-sm">Team: <%= result.team_name %></p>
+                                    <p class="text-slate-200 text-sm">Goals: <%= result.goals_scored %></p>
+                                    <p class="text-slate-200 text-sm">Assists: <%= result.assists %></p>
+                                    <p class="text-slate-200 text-sm">Description: <%= result.description %></p>                            
+                                </div>
+                            <% }) %>
+                        <% } else if (results.length === 0 && !searchSubmitted ) { %>
+                            <p class="text-slate
+                            -200 text-xl">No search submitted yet ... </p>
+                        <% 
+                        } else if (results.length === 0 && searchSubmitted) { %>
+                            <p class="text-slate-200 text-xl">No results found</p>
+                        <% } %>
+
+                    </div>
+                    <% if (page > 1) { %>
+                        <a href="/search?db=<%= db %>&page=<%= page - 1 %>&limit=<%= limit %>">Previous</a>
+                    <% } %>
+                    <% if (results.length === limit && page * limit < totalCount) { %>
+                        <a href="/search?db=<%= db %>&page=<%= page + 1 %>&limit=<%= limit %>">Next</a>
+                    <% } %>
+                </div>
+            </div>
+        </main>
     </div>
+</body>

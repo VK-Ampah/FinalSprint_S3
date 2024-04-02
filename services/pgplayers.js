@@ -1,10 +1,16 @@
+const { get } = require('http');
 const pool  = require('./pg.dal');
 
 
-const getUsers = async () => {
+const getPlayers = async (attribute,position) => {
     try {
-        const users = await pool.query('SELECT * FROM players limit 2');
-        console.log(users.rows);
+        const query = `SELECT * \
+        FROM players \
+        WHERE lower(description) ILIKE lower($1) AND lower(position) ILIKE lower($2)`;
+
+        const values = [`%${attribute}%`, `%${position}%`];
+        const users = await pool.query(query, values);
+        // console.log(users.rows);
         return users.rows;
     } catch (error) {
         console.error('Error getting users:', error);
@@ -12,4 +18,25 @@ const getUsers = async () => {
     }
 }
 
-getUsers().catch(console.dir);
+getPlayers('a','defender').catch(console.dir);
+
+const getPlayersDescription = async (attribute, position, limit, offset) => {
+    const query = `SELECT * \
+        FROM players \
+        WHERE lower(description) ILIKE lower($1) AND lower(position) ILIKE lower($2) \
+        LIMIT $3 OFFSET $4`;
+
+    const values = [`%${attribute}%`, `%${position}%`, limit, offset];
+    try {
+        const users = await pool.query(query, values);
+        // console.log(users.rows);
+        return users.rows;
+    } catch (error) {
+        console.error('Error getting users:', error);
+        throw error;
+    }
+}
+
+// getPlayersDescription('agile','defender').catch(console.dir);
+
+module.exports = { getPlayers, getPlayersDescription};
