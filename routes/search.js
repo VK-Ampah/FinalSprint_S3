@@ -1,6 +1,10 @@
+// const {logMiddleware} = require('../logger');
 const router = require('express').Router();
+
 const { getPlayersDescription, getPlayers } = require('../services/pgplayers'); // pg
 const { getAllPlayers,getPlayersByDescription } = require('../services/mdbusers'); // mongodb
+
+// router.use(logMiddleware);
 
 
 // get search page
@@ -10,6 +14,7 @@ router.get('/', async (req, res) => {
         return res.redirect('/signup');
     }
 
+    console.log(req)
     // Extract search criteria and database selections from the session storage
     const attribute = req.session.attribute || '';
     const position = req.session.position || '';
@@ -23,13 +28,15 @@ router.get('/', async (req, res) => {
     let searchSubmitted = false;
     console.log(' Initial search submitted: ',searchSubmitted)
 
+    const date = new Date();
+
     try {
         if (db === 'mongodb' && req.query.page) {
             console.log('GET from mongodb')
             const mongoResults = await getAllPlayers(attribute, position);
             totalCount = mongoResults.length;
             results = await getPlayersByDescription(req.session.attribute, req.session.position, limit, offset);
-                searchSubmitted = req.session.searchSubmitted;
+            searchSubmitted = req.session.searchSubmitted;
    
             console.log('mongo search submitted: ',searchSubmitted)
             console.log(results[0])

@@ -1,13 +1,15 @@
+// const {logMiddelwareSignIn} = require('../logger');
 const router = require('express').Router();
 // const flash = require('express-flash');
 
 const { getAuthUsers, loginAuthUser, } = require('../services/pg.authdb');
+// router.use(logMiddelwareSignIn);
 
 
 // render signin page
 router.get('/', async (req, res) => {
     try {
-        if (DEBUG) console.log('GET /logins');
+        if (DEBUG) console.log('GET /signin');
         const loggedIn = req.session.loggedIn || false;
         res.render('signin', { loggedIn });
     } catch (error) {
@@ -25,6 +27,7 @@ router.post('/', async (req, res) => {
         if (DEBUG) console.log('POST /logins');
         const { username, password } = req.body;
         const user = await loginAuthUser(username, password);
+        req.session.username = username;       
         if (user.error) {
             res.status(400).send('Invalid Credentials');
         } else {

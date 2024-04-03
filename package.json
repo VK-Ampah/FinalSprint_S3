@@ -13,10 +13,13 @@
     "method-override": "^3.0.0",
     "mongodb": "^6.5.0",
     "mongoose": "^8.2.3",
+    "npmlog": "^7.0.1",
     "pg": "^8.11.3",
     "postcss": "^8.4.38",
     "postcss-cli": "^11.0.0",
-    "tailwindcss": "^3.4.3"
+    "tailwindcss": "^3.4.3",
+    "uuid": "^9.0.1",
+    "winston": "^3.13.0"
   },
   "name": "finalsprint_s3",
   "description": "ththt",
