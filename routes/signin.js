@@ -1,9 +1,9 @@
-const {logMiddelwareSignIn} = require('../logger');
+// const {logMiddelwareSignIn} = require('../logger');
 const router = require('express').Router();
 // const flash = require('express-flash');
 
 const { getAuthUsers, loginAuthUser, } = require('../services/pg.authdb');
-router.use(logMiddelwareSignIn);
+// router.use(logMiddelwareSignIn);
 
 
 // render signin page

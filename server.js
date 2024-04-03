@@ -1,4 +1,5 @@
 require('dotenv').config();
+const { logMiddleware,logMiddelwareSignIn,logMiddelwareSignUp,logMiddelwareHome} = require('./logger');
 const express = require('express');
 const app = express();
 const session = require('express-session');
@@ -8,6 +9,28 @@ const path = require('path');
 // const {getUsers} = require('./services/users');
 global.DEBUG = true;
 
+// const logMiddelwareSearch = (req, res, next) => {   
+//         switch (req.baseUrl) {
+//             case '/home':
+//             case '/':
+//                 app.use(logMiddelwareHome);
+//                 break;
+//             case '/signup':
+//                 app.use(logMiddelwareSignUp);
+//                 break;
+//             case '/signin':
+//                 app.use(logMiddelwareSignIn);
+//                 break;
+//             case '/search':
+//                 app.use(logMiddleware);
+//                 break;
+//             default:
+//                 console.log('No path found');
+//         }
+//         next();
+// }
+
+// app.use(logMiddelwareSearch);
 // Initialize express-session
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -30,16 +53,16 @@ app.set('view engine', 'ejs');
 // });
 
 const homeRouter = require('./routes/home');
-app.use('/', homeRouter);
+app.use('/',logMiddelwareHome, homeRouter);
 
 const signupRouter = require('./routes/signup');
-app.use('/signup', signupRouter);
+app.use('/signup', logMiddelwareSignUp, signupRouter);
 
 const loginsRouter = require('./routes/signin');
-app.use('/signin', loginsRouter);
+app.use('/signin', logMiddelwareSignIn,  loginsRouter);
 
 const searchRouter = require('./routes/search');
-app.use('/search', searchRouter);
+app.use('/search', logMiddleware, searchRouter);
 
 
 app.use((req, res) => {
