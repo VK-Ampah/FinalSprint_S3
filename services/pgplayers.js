@@ -18,7 +18,7 @@ const getPlayers = async (attribute,position) => {
     }
 }
 
-getPlayers('a','defender').catch(console.dir);
+// getPlayers('a','defender').catch(console.dir);
 
 const getPlayersDescription = async (attribute, position, limit, offset) => {
     const query = `SELECT * \
