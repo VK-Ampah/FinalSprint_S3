@@ -2,8 +2,6 @@
 const { connectToMongoDB } = require('./mdb.dal');
 
 
-// countUsers().catch(console.dir);
-
 const getAllPlayers = async (attribute, position) => {
     const { client, db } = await connectToMongoDB();
     try {
@@ -26,8 +24,6 @@ const getAllPlayers = async (attribute, position) => {
         }
     }
 }
-getAllPlayers('a', 'defender').catch(console.dir);
-
 
 const getPlayersByDescription = async (attribute, position, limit, offset) => {
     const { client, db } = await connectToMongoDB();
@@ -53,8 +49,6 @@ finally {
     }
 }
 }
-
-// getAllPlayers('a', 'defender', 10, 0).catch(console.dir);
 
 module.exports = { getAllPlayers,getPlayersByDescription };
 
