@@ -25,10 +25,12 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 // routes
-app.get('/', (req, res) => {
-    res.render('index', { loggedIn: req.session.loggedIn });
-});
+// app.get('/', (req, res) => {
+//     res.render('index', { loggedIn: req.session.loggedIn });
+// });
 
+const homeRouter = require('./routes/home');
+app.use('/', homeRouter);
 
 const signupRouter = require('./routes/signup');
 app.use('/signup', signupRouter);
@@ -38,16 +40,6 @@ app.use('/signin', loginsRouter);
 
 const searchRouter = require('./routes/search');
 app.use('/search', searchRouter);
-
-// // Get search page
-// app.get('/search', (req, res) => {
-//     // Check if the user is logged in
-//     if (req.session.loggedIn) {
-//         res.render('search');
-//     } else {
-//         res.redirect('/');
-//     }
-// });
 
 
 app.use((req, res) => {

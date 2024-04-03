@@ -1,4 +1,4 @@
-const logMiddleware = require('../logger');
+const {logMiddleware} = require('../logger');
 const router = require('express').Router();
 
 const { getPlayersDescription, getPlayers } = require('../services/pgplayers'); // pg
