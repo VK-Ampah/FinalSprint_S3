@@ -10,5 +10,18 @@ async function connectToMongoDB() {
         const db =  client.db("s3_searchengine");
         return { client, db };
     }
+// create index on search fields
+const createIndex = async () => {
+    // connect
+    const { client, db } = await connectToMongoDB();
+    const collection = db.collection('players');
+    await collection.createIndex({ description: 'text' });
+    await collection.createIndex({ position: 1 });
+    // list the indexes
+    const indexes = await collection.indexes();
+    console.log('Indexes:', indexes);
+}
+
+// createIndex().catch(console.dir);
 
 module.exports = { connectToMongoDB };
