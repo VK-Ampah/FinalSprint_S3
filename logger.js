@@ -17,7 +17,7 @@ if (!fs.existsSync(logDirectory)) {
  const dateYear = `${date.getFullYear()}`;
  const dateMonth = date.toLocaleString('default', { month: 'long' }).slice(0, 3); // Get the first three letters of the month name
 
- const pathSubfolder = path.join(logDirectory,'search');
+ const pathSubfolder = path.join(logDirectory);
  if (!fs.existsSync(pathSubfolder)) {
     fs.mkdirSync(pathSubfolder);}
 
