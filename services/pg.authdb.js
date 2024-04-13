@@ -81,7 +81,7 @@ const loginAuthUser = async (username, password) => {
         if (user.rows.length > 0) {
             const isValidPassword = await bcrypt.compare(password, user.rows[0].password_hash);
             if (isValidPassword) {
-                return { message: "Logged in successfully" };
+                return { user_id: user.rows[0].user_id, message: "Logged in successfully" };
             } else {
                 return { error: "Invalid Credentials" };
             }

@@ -21,13 +21,16 @@ router.get('/', async (req, res) => {
 
 // post signin page and compare input password to hashed password
 router.post('/', async (req, res) => {
-    console.log('Session ID:', req.sessionID); // Log the session ID
-    console.log('Session:', req.session); // Log the session object
+    // console.log('Session ID:', req.sessionID); // Log the session ID
+    // console.log('Session:', req.session); // Log the session object
     try {
         if (DEBUG) console.log('POST /logins');
         const { username, password } = req.body;
         const user = await loginAuthUser(username, password);
-        req.session.username = username;       
+        // console.log('User:', user);
+        req.session.username = username;
+        req.session.user_id = user.user_id;
+        // console.log('User:', req.session.user_id);       
         if (user.error) {
             res.status(400).send('Invalid Credentials');
         } else {
@@ -51,7 +54,6 @@ router.get('/signout', (req, res) => {
         res.redirect('/');
     });
 });
-
 
 module.exports = router;
 

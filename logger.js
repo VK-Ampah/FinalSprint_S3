@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const winston = require('winston');
 const { v4: uuidv4 } = require('uuid');
-const { log } = require('console');
+
 
 
 // Create the log directory if it doesn't exist
@@ -11,7 +11,7 @@ const logDirectory = path.join(__dirname, '.log');
 if (!fs.existsSync(logDirectory)) {
         fs.mkdirSync(logDirectory);
  }
- // dates
+ // dates processing
  const date = new Date();
  const dateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
  const dateYear = `${date.getFullYear()}`;
@@ -38,11 +38,6 @@ if (!fs.existsSync(logDirectory)) {
 // Create a log file path using the current date as file name the month subfolder as its root
 const logFilePath = path.join(logMonthSubfolderPath, `${dateString}.log`);
 
-// // Write the header to the log file
-// if (!fs.existsSync(logFilePath)) {
-//     fs.writeFileSync(logFilePath, 'Level, Date, User, Method, Route, Url, Database, SearchCategory, SearchTerm, StatusCode, Message\n', { flag: 'a' });
-// }
-
 const logger = winston.createLogger({
     level: 'info',
     format: winston.format.combine(
@@ -59,7 +54,7 @@ const logger = winston.createLogger({
 const logMiddleware = (req, res, next) => {
     // get information about the request
     req.logId = uuidv4();
-    const username = req.session.username || 'Anonymous';
+    const user_id = req.session.user_id || 'Anonymous';
     const database = req.session.database || 'None';
     const attribute = req.session.attribute || 'None';
     const position = req.session.position || 'None';
@@ -86,19 +81,17 @@ const logMiddleware = (req, res, next) => {
     if(req.url !== '/favicon.ico') {
     logger.log({
         level: logLevel,
-        message: `${username},${method},${route},${url},${database},${position},${attribute},${statusCode},${statusMessage},${logId}`
+        message: `${user_id},${method},${route},${url},${database},${position},${attribute},${statusCode},${statusMessage},${logId}`
     });
 }
 
     next();
 };
 
-
-
 const logMiddelwareSignIn = (req, res, next) => {
     // get information about the request
     req.logId = uuidv4();   
-    const username = req.session.username || 'Anonymous';
+    const user_id = req.session.user_id || 'Anonymous';
     const method = req.method;
     const route = req.url;
     const url = req.originalUrl;
@@ -123,7 +116,7 @@ const logMiddelwareSignIn = (req, res, next) => {
     if(req.url !== '/favicon.ico') {
     logger.log({
         level: 'info',
-        message: `${username},${method},${route},${url},${ipAddress},${statusCode},${statusMessage},${logId}`
+        message: `${user_id},${method},${route},${url},${ipAddress},${statusCode},${statusMessage},${logId}`
     });
 }
 
@@ -134,7 +127,7 @@ const logMiddelwareSignUp = (req, res, next) => {
     // get information about the request
     req.logId = uuidv4();
     const logId = req.logId;
-    const username = req.session.username || 'Anonymous';
+    const user_id = req.session.user_id || 'Anonymous';
     const method = req.method;
     const route = req.url;
     const url = req.originalUrl;
@@ -159,7 +152,7 @@ const logMiddelwareSignUp = (req, res, next) => {
     if(req.url !== '/favicon.ico') {
     logger.log({
         level: logLevel,
-        message: `${username},${method},${route},${url},${ipAddress},${statusCode},${statusMessage},${logId}`
+        message: `${user_id},${method},${route},${url},${ipAddress},${statusCode},${statusMessage},${logId}`
     });
 }
 
@@ -170,7 +163,7 @@ const logMiddelwareHome = (req, res, next) => {
         // get information about the request
         req.logId = uuidv4();
         const logId = req.logId;
-        const username = req.session.username || 'Anonymous';
+        const user_id = req.session.user_id || 'Anonymous';
         const method = req.method;
         const route = req.baseUrl ? req.baseUrl : '/';
         const url = req.originalUrl;
@@ -194,7 +187,7 @@ const logMiddelwareHome = (req, res, next) => {
         if(req.url !== '/favicon.ico') {
         logger.log({
             level: logLevel,
-            message: `${username},${method},${route},${url},${ipAddress},${statusCode},${statusMessage},${logId}`
+            message: `${user_id},${method},${route},${url},${ipAddress},${statusCode},${statusMessage},${logId}`
         });
     }
     
@@ -203,5 +196,3 @@ const logMiddelwareHome = (req, res, next) => {
 
 
 module.exports = { logMiddleware, logMiddelwareSignIn, logMiddelwareSignUp, logMiddelwareHome};
-
-// module.exports = logMiddleware;
