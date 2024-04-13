@@ -9,28 +9,6 @@ const path = require('path');
 // const {getUsers} = require('./services/users');
 global.DEBUG = true;
 
-// const logMiddelwareSearch = (req, res, next) => {   
-//         switch (req.baseUrl) {
-//             case '/home':
-//             case '/':
-//                 app.use(logMiddelwareHome);
-//                 break;
-//             case '/signup':
-//                 app.use(logMiddelwareSignUp);
-//                 break;
-//             case '/signin':
-//                 app.use(logMiddelwareSignIn);
-//                 break;
-//             case '/search':
-//                 app.use(logMiddleware);
-//                 break;
-//             default:
-//                 console.log('No path found');
-//         }
-//         next();
-// }
-
-// app.use(logMiddelwareSearch);
 // Initialize express-session
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -47,10 +25,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// routes
-// app.get('/', (req, res) => {
-//     res.render('index', { loggedIn: req.session.loggedIn });
-// });
 
 const homeRouter = require('./routes/home');
 app.use('/',logMiddelwareHome, homeRouter);
