@@ -1,9 +1,7 @@
-// const {logMiddelwareSignUp} = require('../logger');
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
-
 const { addAuthUser } = require('../services/pg.authdb');
-// router.use(logMiddelwareSignUp);
+
 
 // get signup page
 router.get('/', async (req, res) => {
@@ -24,10 +22,7 @@ router.post('/', async (req, res) => {
         const hashedPassword = await bcrypt.hash(req.body.password, 10); 
         const newUser = await addAuthUser(req.body.firstname, req.body.lastname, req.body.email, req.body.username, hashedPassword );
         req.session.user_id = newUser[0].user_id;
-        // console.log(req.body);
-        console.log(newUser);
         res.redirect('/signin');
-        // res.send('User created');
     } catch (err) {
         console.error(err);
         res.status(500).send('An error occurred while creating the user');

@@ -1,10 +1,7 @@
-// const {logMiddleware} = require('../logger');
 const router = require('express').Router();
 
-const { getPlayersDescription, getPlayers } = require('../services/pgplayers'); // pg
-const { getAllPlayers,getPlayersByDescription } = require('../services/mdbusers'); // mongodb
-
-// router.use(logMiddleware);
+const { getPlayersDescription, getPlayers } = require('../services/pgplayers'); 
+const { getAllPlayers,getPlayersByDescription } = require('../services/mdbusers'); 
 
 
 // get search page
@@ -13,6 +10,7 @@ router.get('/', async (req, res) => {
         // If not logged in, redirect to the login or signup page
         return res.redirect('/signup');
     }
+    if (DEBUG) console.log('GET /search')
 
     // console.log(req)
     // Extract search criteria and database selections from the session storage
@@ -26,7 +24,7 @@ router.get('/', async (req, res) => {
     let totalPages = 0;
     let totalCount = 0;
     let searchSubmitted = false;
-    console.log(' Initial search submitted: ',searchSubmitted)
+    // console.log(' Initial search submitted: ',searchSubmitted)
 
     const date = new Date();
 
@@ -86,8 +84,7 @@ router.get('/', async (req, res) => {
 
 // post search page
 router.post('/', async (req, res) => {
-    // console.log(`post body: `,req.body)
-    console.log('POST /search')
+    if (DEBUG) console.log('POST /search')
     if (!req.session.loggedIn) {
         return res.redirect('/signup');
     }
@@ -99,7 +96,7 @@ router.post('/', async (req, res) => {
     req.session.database = database;
     const searchSubmitted = true;
     req.session.searchSubmitted = searchSubmitted;
-    console.log('POST search submitted: ',searchSubmitted)
+    // console.log('POST search submitted: ',searchSubmitted)
 
     // Redirect to GET route to display initial results// page 1
     res.redirect(`/search?db=${database}&page=1`);
