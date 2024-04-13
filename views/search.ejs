@@ -1,23 +1,19 @@
 <html lang="en">
 <%- include ('./partials/head.ejs') %>
-<body class="bg-slate-900 h-screen flex flex-col">
-    <div class="h-full">
-        <header>
+<body class="bg-slate-900 flex flex-col min-h-screen">
+    <header>
         <%- include ('./partials/navbar.ejs') %>
-        </header>
-        <main>
-            <div class="bg-slate-900 text-slate-400 flex flex-col items-center justify-center">
+    </header>
+        <main class="flex-grow">
+            <div class="border-red-500 text-slate-400 flex flex-col items-center justify-center">
                 <p class="text-slate-200 text-2xl mb-4">Search for players</p>
                 <div>
                     <form action="/search" method="POST" enctype="application/x-www-form-urlencoded">
-                        <div class="flex flex-col md:flex-row items-center justify-center gap-2">
+                        <div class="flex flex-col md:flex-row items-end justify-center gap-2">
                             <div class="flex flex-col m-2">
                                 <label class="text-slate-200" for="attribute">Player Description:</label>
                                 <input type="text" id="attribute" name="attribute"  class="rounded h-10" required>
                             </div>
-
-                        <!-- <label for="position">Player Position:</label>
-                        <input type="text" id="position" name="position" required> -->
 
                             <div class="m-2">
                                 <label for="position" class="block mb-2 text-sm font-medium text-slate-200">Select Position</label>
@@ -30,13 +26,6 @@
                                 </select>
                             </div>
 
-                        <!-- <label for="database">Choose DB:</label>
-                        <select name="database" id="database">
-                            <option value="postgres">PostgreSQL</option>
-                            <option value="mongodb">MongoDB</option>
-                            <option value="all">ALL</option>
-                        </select> -->
-
                             <div class="m-2">
                                 <label for="database" class="block mb-2 text-sm font-medium text-slate-200">Select a DB option</label>
                                 <select name="database" id="database" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
@@ -47,8 +36,9 @@
                                 </select>
                             </div>
 
-                            <div>
-                                <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Search</button>
+                            <div class=" m-2 flex items-end gap-2">
+                                <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Search</button>                               
+                                <button type="reset" class="text-white bg-red-700 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Reset</button>                          
                             </div>
                         </div>
                     </form>
@@ -76,14 +66,23 @@
                         <% } %>
 
                     </div>
+                    <div class="flex justify-center gap-4 items-center mt-2">
                     <% if (page > 1) { %>
-                        <a href="/search?db=<%= db %>&page=<%= page - 1 %>&limit=<%= limit %>">Previous</a>
+                        <button class="text-white bg-red-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">
+                            <a href="/search?db=<%= db %>&page=<%= page - 1 %>&limit=<%= limit %>">Previous</a>
+                        </button>
                     <% } %>
                     <% if (results.length === limit && page * limit < totalCount) { %>
-                        <a href="/search?db=<%= db %>&page=<%= page + 1 %>&limit=<%= limit %>">Next</a>
+                        <button class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">
+                            <a href="/search?db=<%= db %>&page=<%= page + 1 %>&limit=<%= limit %>">Next</a>
+                        </button>
                     <% } %>
+                    </div>
                 </div>
             </div>
         </main>
-    </div>
+        <footer>
+            <%- include ('./partials/footer.ejs') %>
+        </footer>
+
 </body>

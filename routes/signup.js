@@ -23,8 +23,8 @@ router.post('/', async (req, res) => {
         req.session.username = req.body.username;
         const hashedPassword = await bcrypt.hash(req.body.password, 10); 
         const newUser = await addAuthUser(req.body.firstname, req.body.lastname, req.body.email, req.body.username, hashedPassword );
-        console.log(req.body);
-        console.log(newUser);
+        // console.log(req.body);
+        // console.log(newUser);
         res.redirect('/signin');
         // res.send('User created');
     } catch (err) {

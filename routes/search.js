@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
         return res.redirect('/signup');
     }
 
-    console.log(req)
+    // console.log(req)
     // Extract search criteria and database selections from the session storage
     const attribute = req.session.attribute || '';
     const position = req.session.position || '';
@@ -39,7 +39,7 @@ router.get('/', async (req, res) => {
             searchSubmitted = req.session.searchSubmitted;
    
             console.log('mongo search submitted: ',searchSubmitted)
-            console.log(results[0])
+            // console.log(results[0])
         } else if (db === 'postgres' && req.query.page) {
             console.log('GET from postgres')
             const pgResults = await getPlayers(attribute, position);
@@ -48,23 +48,23 @@ router.get('/', async (req, res) => {
                 searchSubmitted = req.session.searchSubmitted;
      
             console.log('pg search submitted: ',searchSubmitted)
-            console.log(results[0])
+            // console.log(results[0])
         } else if (db === 'all' && req.query.page) {
             const mongoResults = await getAllPlayers(attribute, position);
             const pgResults = await getPlayers(attribute, position);
             const combinedResults = mongoResults.concat(pgResults);        
             searchSubmitted = req.session.searchSubmitted;            
-            console.log(' Both search submitted: ',searchSubmitted)
+            // console.log(' Both search submitted: ',searchSubmitted)
            
             totalCount = combinedResults.length;
             console.log('GET from both')
-            console.log(combinedResults[0])
+            // console.log(combinedResults[0])
             
             // Manual pagination for combined dataset
             results = combinedResults.slice(offset, offset + limit);
             totalPages = Math.ceil(combinedResults.length / limit);
-            console.log('combined results: ',combinedResults.length)
-            console.log('total pages: ',totalPages)
+            // console.log('combined results: ',combinedResults.length)
+            // console.log('total pages: ',totalPages)
         }
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -86,7 +86,7 @@ router.get('/', async (req, res) => {
 
 // post search page
 router.post('/', async (req, res) => {
-    console.log(`post body: `,req.body)
+    // console.log(`post body: `,req.body)
     console.log('POST /search')
     if (!req.session.loggedIn) {
         return res.redirect('/signup');
