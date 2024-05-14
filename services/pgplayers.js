@@ -10,7 +10,6 @@ const getPlayers = async (attribute,position) => {
 
         const values = [`%${attribute}%`, `%${position}%`];
         const users = await pool.query(query, values);
-        // console.log(users.rows);
         return users.rows;
     } catch (error) {
         console.error('Error getting users:', error);
@@ -29,7 +28,6 @@ const getPlayersDescription = async (attribute, position, limit, offset) => {
     const values = [`%${attribute}%`, `%${position}%`, limit, offset];
     try {
         const users = await pool.query(query, values);
-        // console.log(users.rows);
         return users.rows;
     } catch (error) {
         console.error('Error getting users:', error);
@@ -37,6 +35,5 @@ const getPlayersDescription = async (attribute, position, limit, offset) => {
     }
 }
 
-// getPlayersDescription('agile','defender').catch(console.dir);
 
 module.exports = { getPlayers, getPlayersDescription};

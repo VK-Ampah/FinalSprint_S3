@@ -23,14 +23,12 @@ if (!fs.existsSync(logDirectory)) {
 
   // Create a log subfolder path with current YEAR value of current data as folder name in the log directory
   const logYearSubfolderPath = path.join(pathSubfolder, dateYear);
-  // Create the year subfolder if it doesn't exist
+ 
   if (!fs.existsSync(logYearSubfolderPath)) {
       fs.mkdirSync(logYearSubfolderPath);
   }
-  // Create a log subfolder path with current MONTH name of current data as folder name in the year subfolder
   const logMonthSubfolderPath = path.join(logYearSubfolderPath, dateMonth);
  
-  // Create the month subfolder if it doesn't exist
   if (!fs.existsSync(logMonthSubfolderPath)) {
       fs.mkdirSync(logMonthSubfolderPath);
   }

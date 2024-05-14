@@ -6,17 +6,14 @@ const session = require('express-session');
 const methodOverride = require('method-override');
 const port = process.env.PORT || 3000;
 const path = require('path');
-// const {getUsers} = require('./services/users');
-global.DEBUG = true;
+
+global.DEBUG = false;
 
 // Initialize express-session
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false
-    // cookie: {
-    //     maxAge: 60 * 60 * 1000 // persist session for 1 hour
-    // }
 }));
 // configure views and static files
 app.use(express.urlencoded({ extended: true }));

@@ -1,4 +1,3 @@
-// const { get } = require('mongoose');
 const { connectToMongoDB } = require('./mdb.dal');
 
 
@@ -11,7 +10,6 @@ const getAllPlayers = async (attribute, position) => {
                 position: { $regex: new RegExp('^' + position + '$', 'i') }
             });
         const users = await cursor.toArray();
-        // console.log(users);
         return users;
     }
     catch (e) {
@@ -36,7 +34,6 @@ try {
         .skip(offset)
         .limit(limit);
     const users = await cursor.toArray();
-    // console.log(users);
     return users;
 }
 catch (e) {

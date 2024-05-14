@@ -22,6 +22,4 @@ const createIndex = async () => {
     console.log('Indexes:', indexes);
 }
 
-// createIndex().catch(console.dir);
-
 module.exports = { connectToMongoDB };

@@ -18,8 +18,6 @@ router.get('/', async (req, res) => {
 
 // post signin page and compare input password to hashed password
 router.post('/', async (req, res) => {
-    // console.log('Session ID:', req.sessionID); // Log the session ID
-    // console.log('Session:', req.session); // Log the session object
     try {
         if (DEBUG) console.log('POST /logins');
         const { username, password } = req.body;
