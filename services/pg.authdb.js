@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt');
 const getAuthUsers = async () => {
     try {
         const users = await pool.query('SELECT * FROM user_auth limit 10');
-        // console.log(users.rows);
         return users.rows;
     } catch (error) {
         console.error('Error getting users:', error);
@@ -15,7 +14,6 @@ const getAuthUsers = async () => {
 const getAuthUser = async (username) => {
     try {
         const user = await pool.query('SELECT * FROM user_auth WHERE username = $1', [username]);
-        // console.log(user.rows);
         return user.rows;
     } catch (error) {
         console.error('Error getting user:', error);
@@ -28,10 +26,8 @@ const addAuthUser = async (firstname, lastname, email, username, password) => {
         const query = 'INSERT INTO user_auth (first_name, last_name, email, username, password_hash ) VALUES ($1, $2, $3, $4, $5) RETURNING *';
         const values = [firstname, lastname, email, username, password];
         const newUser = await pool.query(query, values);
-        // console.log(newUser.rows);
         return newUser.rows;
     } catch (error) {
-        // console.error('Error adding user:', error);
         console.error('Error adding user:', error.stack);
         throw error;
     }
@@ -95,5 +91,3 @@ const loginAuthUser = async (username, password) => {
 }
 
 module.exports = { getAuthUsers, getAuthUser, addAuthUser, updateAuthUser, deleteAuthUser, deleteAllAuthUsers, loginAuthUser};
-
-// getAuthUsers().catch(console.dir);
